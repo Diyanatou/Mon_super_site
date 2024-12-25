@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaire de renseignement</title>
+    <style>
+        /* Style général */
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #87CEEB, #4682B4); /* Dégradé bleu hivernal */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+            overflow: hidden; /* Empêche le défilement */
+        }
+
+        /* Texte Merry Christmas */
+        .christmas-text {
+            font-size: 3em;
+            font-weight: bold;
+            color: red;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Conteneur du formulaire */
+        .form-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        input[type="text"], input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        /* Flocons de neige */
+        .snowflake {
+            position: absolute;
+            top: -10px;
+            color: white;
+            font-size: 1em;
+            opacity: 0.8;
+            user-select: none;
+            animation: fall linear infinite;
+        }
+
+        footer {
+            background-color: black; /* Fond noir */
+            padding: 10px 0;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%; /* Occupe toute la largeur de l'écran */
+            z-index: 100; /* S'assure que le pied de page reste au-dessus */
+        }
+        
+        footer a {
+            color: white; /* Couleur du texte en blanc */
+            text-decoration: none; /* Enlève la décoration par défaut (souligné) */
+            font-size: 1.2em;
+        }
+        
+        footer a:hover {
+            color: #87CEEB; /* Change la couleur au survol (par exemple bleu clair) */
+        }
+        
+
+        @keyframes fall {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(100vh); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Texte Merry Christmas -->
+    <div class="christmas-text">Merry Christmas🌟🎄🎅</div>
+
+    <!-- Flocons de neige -->
+    <div id="snowflakes"></div>
+
+    <!-- Conteneur du formulaire -->
+    <div class="form-container">
+        <form id="nameForm">
+            <label for="name">Quel est ton prénom ?</label>
+            <input type="text" id="name" name="name" required />
+
+            <label for="photo">Ajoute ta photo :</label>
+            <input type="file" id="photo" name="photo" accept="image/*" required />
+
+            <button type="submit">Envoyer</button>
+        </form>
+    </div>
+    <footer>
+        <a href="https://github.com/Diyanatou/Mon_super_site">Voir le code source sur GitHub</a>
+      </footer>
+    <script>
+        const form = document.getElementById("nameForm");
+
+        form.addEventListener("submit", function (event) {
+            event.preventDefault(); // Empêche l'envoi classique du formulaire
+
+            const name = document.getElementById("name").value;
+            const photo = document.getElementById("photo").files[0];
+
+            // Vérifie si une photo est sélectionnée
+            if (!photo) {
+                alert("Veuillez ajouter une photo.");
+                return;
+            }
+
+            // Redirection vers une nouvelle page avec prénom et photo en paramètres
+            const reader = new FileReader();
+            reader.onload = function () {
+                const imageURL = reader.result; // Convertit l'image en URL
+                localStorage.setItem('name', name);
+                localStorage.setItem('photo', imageURL);
+                window.location.href = "message.html";
+            };
+            reader.readAsDataURL(photo); // Lit la photo
+        });
+
+        // Générer des flocons de neige
+        function createSnowflakes() {
+            const snowflakesContainer = document.getElementById("snowflakes");
+            const numberOfFlakes = 50; // Nombre de flocons
+
+            for (let i = 0; i < numberOfFlakes; i++) {
+                const snowflake = document.createElement("div");
+                snowflake.classList.add("snowflake");
+                snowflake.innerHTML = "❄"; // Symbole du flocon
+                snowflake.style.left = Math.random() * 100 + "vw"; // Position aléatoire
+                snowflake.style.animationDuration = Math.random() * 3 + 2 + "s"; // Durée de chute
+                snowflake.style.fontSize = Math.random() * 20 + 10 + "px"; // Taille aléatoire
+                snowflake.style.animationDelay = Math.random() + "s"; // Décalage aléatoire
+
+                snowflakesContainer.appendChild(snowflake);
+            }
+        }
+
+        createSnowflakes(); // Lancer l'animation
+    </script>
+</body>
+</html>
